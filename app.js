@@ -18,11 +18,11 @@ let stores = []
 
 storesRef.on('value',(snapshot) => {
     stores = []
-    console.log("Value Change Event Occured")
+    // console.log("Value Change Event Occured")
     for(key in snapshot.val()) {
         let store = snapshot.val()[key]
         store.key = key 
-        console.log(store)
+        // console.log(store)
         stores.push(store)
     }
     displayStores(stores)
