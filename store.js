@@ -7,7 +7,6 @@ class Store {
     }
 
     addGroceryItem(name, quantity, price) {
-        // validate the hobby so that you are not adding duplicates
         this.groceryItems.push(name, quantity, price)
     }
 }

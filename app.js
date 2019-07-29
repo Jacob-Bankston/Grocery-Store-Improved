@@ -18,17 +18,13 @@ let stores = []
 
 storesRef.on('value',(snapshot) => {
     stores = []
-    // console.log("Value Change Event Occured")
     for(key in snapshot.val()) {
         let store = snapshot.val()[key]
         store.key = key 
-        // console.log(store)
         stores.push(store)
     }
     displayStores(stores)
 })
-
-/* <span id="${store.key}" onclick='storeSelected("${store.key}")'> */
 
 function displayStores(stores) {
     let storeItems = stores.map(store => {
@@ -50,7 +46,6 @@ function storeSelected(key) {
     grocerylist.style.color = "goldenrod";
     return selectedStore
 }
-
 
 addStoreButton.addEventListener('click',() => {
     let name = nameTextBox.value 
