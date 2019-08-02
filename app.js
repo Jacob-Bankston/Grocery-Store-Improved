@@ -15,12 +15,26 @@ let addFoodItemButton = document.getElementById("addFoodItemButton"); // Adding 
 
 let foodList = document.getElementById("foodList"); // List of Food
 
-let SelectedStoreKey = ''
-let stores = []
-let groceryItems = []
+let selectedStoreKey = '';
+
+function checkIfThereAreStores() {
+    if(stores.length === 0) {
+        return false
+    } else {
+        return true
+    }
+}
+
+function checkIfAStoreIsSelected() {
+    if(selectedStoreKey === '') {
+        return false
+    } else {
+        return true
+    }
+}
 
 storesRef.on("value", snapshot => {
-    stores = [];
+    let stores = [];
     for (key in snapshot.val()) {
         let store = snapshot.val()[key];
         store.key = key;
@@ -30,7 +44,7 @@ storesRef.on("value", snapshot => {
 });
 
 groceryItemRef.on("value", snapshot => {
-    groceryItems = [];
+    let groceryItems = [];
     for (key in snapshot.val()) {
         let item = snapshot.val()[key];
         item.key = key;
@@ -40,7 +54,7 @@ groceryItemRef.on("value", snapshot => {
 })
 
 function displayStores(stores) {
-    if(checkIfThereAreStores()) {
+    if(checkIfThereAreStores() === true) {
         let storeItems = stores.map(store => {
         return `<div class="storeItem">
                     <div class="storeButtons">
@@ -57,10 +71,10 @@ function displayStores(stores) {
 }
 
 function displayGroceryItems(items) {
-    if(checkIfAStoreIsSelected()) {
+    if(checkIfAStoreIsSelected() === true) {
         checkIfAStoreIsSelected();
         let groceryItems = items.map(item => {
-            if(item.storeId === SelectedStoreKey) {
+            if(item.storeId === selectedStoreKey) {
                 return `<div class="groceryItem">
                             <span>${item.foodName}</span>
                             <span>${item.quantityOfFood}</span>
@@ -74,25 +88,9 @@ function displayGroceryItems(items) {
 }
 
 function selectStore(key) {
-    SelectedStoreKey = key;
+    selectedStoreKey = key;
     grocerylist.style.color = "goldenrod";
-    return SelectedStoreKey;
-}
-
-function checkIfThereAreStores() {
-    if(stores === undefined) {
-        return false
-    } else {
-        return true
-    }
-}
-
-function checkIfAStoreIsSelected() {
-    if(SelectedStoreKey == '') {
-        return false
-    } else {
-        return true
-    }
+    return selectedStoreKey;
 }
 
 addStoreButton.addEventListener("click", () => {
@@ -111,7 +109,7 @@ addFoodItemButton.addEventListener("click", () => {
     addQuantityOfFood.value = "";
     let priceOfFood = addPriceOfFood.value;
     addPriceOfFood.value = "";
-    saveGroceryItem(SelectedStoreKey, foodName, quantityOfFood, priceOfFood);
+    saveGroceryItem(selectedStoreKey, foodName, quantityOfFood, priceOfFood);
 });
 
 function deleteStore(key) {
