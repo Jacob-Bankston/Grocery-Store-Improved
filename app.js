@@ -11,21 +11,22 @@ let storeList = document.getElementById("storeList"); // List of Stores
 let addFoodName = document.getElementById("addFoodName"); // Food Name
 let addQuantityOfFood = document.getElementById("addQuantityOfFood"); // Quantity
 let addPriceOfFood = document.getElementById("addPriceOfFood"); // Price of Food
-let addFoodItemButton = document.getElementById("addFoodButton"); // Adding Food Item Button
+let addFoodItemButton = document.getElementById("addFoodItemButton"); // Adding Food Item Button
 
 let foodList = document.getElementById("foodList"); // List of Food
 
 let SelectedStoreKey = ''
-
+let stores = []
+let groceryItems = []
 
 storesRef.on("value", snapshot => {
-  stores = [];
-  for (key in snapshot.val()) {
-    let store = snapshot.val()[key];
-    store.key = key;
-    stores.push(store);
-  }
-  displayStores(stores);
+    stores = [];
+    for (key in snapshot.val()) {
+        let store = snapshot.val()[key];
+        store.key = key;
+        stores.push(store);
+    }
+    displayStores(stores);
 });
 
 groceryItemRef.on("value", snapshot => {
@@ -33,51 +34,64 @@ groceryItemRef.on("value", snapshot => {
     for (key in snapshot.val()) {
         let item = snapshot.val()[key];
         item.key = key;
-        groceryItems.push()
+        groceryItems.push(item);
     }
     displayGroceryItems(groceryItems);
 })
 
 function displayStores(stores) {
-  let storeItems = stores.map(store => {
-    return `<div class="storeItem">
-                <div class="storeButtons">
-                    <button onclick='selectStore("${store.key}")'>Add Item</button>
-                    <button onclick='deleteStore("${store.key}")'>Delete</button>
-                </div>
-                <span class="storeNameInfo">${store.name}</span>
-                <span class="storeAddressInfo">${store.address}</span>
-                <div id="${store.key}" class="groceryItemsListOnTheStore"></div>
-            </div>`;
-  });
-  storeList.innerHTML = storeItems.join("");
+    if(checkIfThereAreStores()) {
+        let storeItems = stores.map(store => {
+        return `<div class="storeItem">
+                    <div class="storeButtons">
+                        <button onclick='selectStore("${store.key}")'>Add Item</button>
+                        <button onclick='deleteStore("${store.key}")'>Delete</button>
+                    </div>
+                    <span class="storeNameInfo">${store.name}</span>
+                    <span class="storeAddressInfo">${store.address}</span>
+                    <div id="${store.key}" class="groceryItemsListOnTheStore"></div>
+                </div>`;
+        });
+        storeList.innerHTML = storeItems.join("");
+    }
 }
 
 function displayGroceryItems(items) {
-    checkIfAStoreIsSelected()
-    let groceryItems = items.map(item => {
-        if(item.storeId === SelectedStoreKey) {
-            return `<div class="groceryItem">
-                        <span>${item.foodName}</span>
-                        <span>${item.quantityOfFood}</span>
-                        <span>${item.priceOfFood}</span>
-                        <button onclick='deleteGroceryItem("${item.key}")'>Delete</button>
-                    </div>`;
-        }
-    });
-    foodList.innerHTML = groceryItems.join("");
+    if(checkIfAStoreIsSelected()) {
+        checkIfAStoreIsSelected();
+        let groceryItems = items.map(item => {
+            if(item.storeId === SelectedStoreKey) {
+                return `<div class="groceryItem">
+                            <span>${item.foodName}</span>
+                            <span>${item.quantityOfFood}</span>
+                            <span>${item.priceOfFood}</span>
+                            <button onclick='deleteGroceryItem("${item.key}")'>Delete</button>
+                        </div>`;
+            };
+        });
+        foodList.innerHTML = groceryItems.join("");
+    }
 }
 
 function selectStore(key) {
-  SelectedStoreKey = key;
-  grocerylist.style.color = "goldenrod";
-  return SelectedStoreKey;
+    SelectedStoreKey = key;
+    grocerylist.style.color = "goldenrod";
+    return SelectedStoreKey;
+}
+
+function checkIfThereAreStores() {
+    if(stores === undefined) {
+        return false
+    } else {
+        return true
+    }
 }
 
 function checkIfAStoreIsSelected() {
     if(SelectedStoreKey == '') {
-        alert("Please select a store first!")
-        break;
+        return false
+    } else {
+        return true
     }
 }
 
@@ -149,3 +163,4 @@ function saveGroceryitem(storeId, foodName, quantityOfFood, priceOfFood) {
 }
 
 displayStores();
+displayGroceryItems();
