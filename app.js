@@ -34,7 +34,6 @@ function displayStores(stores) {
                 </div>
                 <span class="storeNameInfo">${store.name}</span>
                 <span class="storeAddressInfo">${store.address}</span>
-                <div id="${store.key}" class="groceryItemsListOnTheStore"></div>
             </div>`;
   });
   storeList.innerHTML = storeItems.join("");
