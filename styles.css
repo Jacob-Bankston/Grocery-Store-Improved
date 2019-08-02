@@ -1,82 +1,85 @@
 body {
-    background-color: lightgray;
-    margin: 0;
-    padding: 0;
+  background-color: lightgray;
+  margin: 0;
+  padding: 0;
 }
 
 #heading {
-    display: flex;
-    justify-content: center;
-    text-shadow: 2px 2px 6px black;
-    color: #1A8CFE;
-    background-color: #4D4D4D;
-    border: 2px solid black;
-    border-radius: 5px;
-    font-size: 1.5em;
-    font-family: 'Bungee Outline', cursive;
-    text-align: center;
+  display: flex;
+  justify-content: center;
+  text-shadow: 2px 2px 6px black;
+  color: #1a8cfe;
+  background-color: #4d4d4d;
+  border: 2px solid black;
+  border-radius: 5px;
+  font-size: 1.5em;
+  font-family: "Bungee Outline", cursive;
+  text-align: center;
 }
 
-#adding-stores, #adding-items {
-    display: flex;
-    background-color: #1A8CFE;
-    border: 1px solid black;
-    border-radius: 3px;
-    justify-content: flex-end;
+#addingStores,
+#addingFoodItems {
+  display: flex;
+  background-color: #1a8cfe;
+  border: 1px solid black;
+  border-radius: 3px;
+  justify-content: flex-end;
 }
 
-#addressTextBox, #quantityTextBox, #nameTextBox, #food-nameTextBox, #priceTextBox {
-    flex: 1;
-    border: 2px solid #1A8CFE;
-    color: #1A8CFE;
-    text-shadow: 2px 2px 4px darkgray;
-    text-align: center;
-    font-size: 1.2em;
-    font-family: 'Lobster', cursive;
+#addressTextBox,
+#addQuantityOfFood,
+#nameTextBox,
+#addFoodName,
+#addPriceOfFood {
+  flex: 1;
+  border: 2px solid #1a8cfe;
+  color: #1a8cfe;
+  text-shadow: 2px 2px 4px darkgray;
+  text-align: center;
+  font-size: 1.2em;
+  font-family: "Lobster", cursive;
 }
 
-#addressTextBox button, #quantityTextBox button, #nameTextBox button, #food-nameTextBox button, #priceTextBox button {
-    font-family: 'Lobster', cursive;
+#addressTextBox button,
+#addQuantityOfFood button,
+#nameTextBox button,
+#addFoodName button,
+#addPriceOfFood button {
+  font-family: "Lobster", cursive;
 }
 
 #storeList {
-    display: flex;
-    flex-wrap: wrap;
-    background-color: #1A8CFE;
-    font-family: 'Dosis', sans-serif;
-    justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #1a8cfe;
+  font-family: "Dosis", sans-serif;
+  justify-content: center;
 }
 
 .storeItem {
-    display: flex;
-    flex-direction: column;
-    color: white;
-    text-shadow: 1px 1px 2px darkgray;
-    background-color: rgba(0,0,0,.2);
-    padding: 5px;
-    margin: 10px 5px 5px 5px;
-    border: 2px solid black;
-    border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  text-shadow: 1px 1px 2px darkgray;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 5px;
+  margin: 10px 5px 5px 5px;
+  border: 2px solid black;
+  border-radius: 4px;
 }
 
 .storeItem button {
-    border-color: white;
+  border-color: white;
 }
 
 @media screen and (max-width: 540px) {
-
-    #adding-stores {
-        flex-direction: column;
-    }
-
-
+  #addingStores {
+    flex-direction: column;
+  }
 }
 
 @media screen and (max-width: 709px) {
-
-    #adding-items {
-        flex-direction: column;
-    }
-
-
+  #addingFoodItems {
+    flex-direction: column;
+  }
 }
