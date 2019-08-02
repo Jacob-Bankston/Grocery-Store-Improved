@@ -15,7 +15,7 @@ let addFoodItemButton = document.getElementById("addFoodButton"); // Adding Food
 
 let foodList = document.getElementById("foodList"); // List of Food
 
-let selectedStore = ''
+let SelectedStoreKey = ''
 
 
 storesRef.on("value", snapshot => {
@@ -54,24 +54,32 @@ function displayStores(stores) {
 }
 
 function displayGroceryItems(items) {
-  let groceryItems = items.map(item => {
-    return `<div class="groceryItem">
-                <span>${item.foodName}</span>
-                <span>${item.quantityOfFood}</span>
-                <span>${item.priceOfFood}</span>
-                <button onclick='deleteGroceryItem("${item.key}")'>Delete</button>
-            </div>`;
-  });
-  foodList.innerHTML = groceryItems.join("");
+    checkIfAStoreIsSelected()
+    let groceryItems = items.map(item => {
+        if(item.storeId === SelectedStoreKey) {
+            return `<div class="groceryItem">
+                        <span>${item.foodName}</span>
+                        <span>${item.quantityOfFood}</span>
+                        <span>${item.priceOfFood}</span>
+                        <button onclick='deleteGroceryItem("${item.key}")'>Delete</button>
+                    </div>`;
+        }
+    });
+    foodList.innerHTML = groceryItems.join("");
 }
 
 function selectStore(key) {
-  let grocerylist = document.getElementById(key);
+  SelectedStoreKey = key;
   grocerylist.style.color = "goldenrod";
-  return selectedStore;
+  return SelectedStoreKey;
 }
 
-
+function checkIfAStoreIsSelected() {
+    if(SelectedStoreKey == '') {
+        alert("Please select a store first!")
+        break;
+    }
+}
 
 addStoreButton.addEventListener("click", () => {
   let name = nameTextBox.value;
@@ -82,16 +90,15 @@ addStoreButton.addEventListener("click", () => {
 });
 
 addFoodItemButton.addEventListener("click", () => {
-  let foodName = addFoodName.value;
-  addFoodName.value = "";
-  let quantityOfFood = addQuantityOfFood.value;
-  addQuantityOfFood.value = "";
-  let priceOfFood = addPriceOfFood.value;
-  addPriceOfFood.value = "";
-  saveGroceryItem(foodName, quantityOfFood, priceOfFood);
+    checkIfAStoreIsSelected()
+    let foodName = addFoodName.value;
+    addFoodName.value = "";
+    let quantityOfFood = addQuantityOfFood.value;
+    addQuantityOfFood.value = "";
+    let priceOfFood = addPriceOfFood.value;
+    addPriceOfFood.value = "";
+    saveGroceryItem(SelectedStoreKey, foodName, quantityOfFood, priceOfFood);
 });
-
-
 
 function deleteStore(key) {
   storesRef.child(key).remove();
@@ -100,7 +107,6 @@ function deleteStore(key) {
 function deleteGroceryItem(key) {
   groceryItemRef.child(key).remove();
 }
-
 
 function saveStore(name, address) {
     // A Store entry.
