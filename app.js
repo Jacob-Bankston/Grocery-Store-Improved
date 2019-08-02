@@ -1,5 +1,6 @@
 let database = firebase.database(); // Firebase Link
 let storesRef = database.ref("stores"); // Reference to stores in database
+let groceryItemRef = database.ref("groceryItems"); // Reference to grocery item in database
 
 let storeNameTextBox = document.getElementById("nameTextBox"); // Store Name
 let addressTextBox = document.getElementById("addressTextBox"); // Store Address
@@ -14,6 +15,8 @@ let addFoodItemButton = document.getElementById("addFoodButton"); // Adding Food
 
 let foodList = document.getElementById("foodList"); // List of Food
 
+let selectedStore = ''
+
 
 storesRef.on("value", snapshot => {
   stores = [];
@@ -25,6 +28,16 @@ storesRef.on("value", snapshot => {
   displayStores(stores);
 });
 
+groceryItemRef.on("value", snapshot => {
+    groceryItems = [];
+    for (key in snapshot.val()) {
+        let item = snapshot.val()[key];
+        item.key = key;
+        groceryItems.push()
+    }
+    displayGroceryItems(groceryItems);
+})
+
 function displayStores(stores) {
   let storeItems = stores.map(store => {
     return `<div class="storeItem">
@@ -34,6 +47,7 @@ function displayStores(stores) {
                 </div>
                 <span class="storeNameInfo">${store.name}</span>
                 <span class="storeAddressInfo">${store.address}</span>
+                <div id="${store.key}" class="groceryItemsListOnTheStore"></div>
             </div>`;
   });
   storeList.innerHTML = storeItems.join("");
@@ -51,11 +65,8 @@ function displayGroceryItems(items) {
   foodList.innerHTML = groceryItems.join("");
 }
 
-function storeSelected(key) {
-  displayStores(stores);
-  selectedStore = key;
+function selectStore(key) {
   let grocerylist = document.getElementById(key);
-  grocerylist.insertAdjacentHTML("beforeend", " - ADD TO THIS LIST!");
   grocerylist.style.color = "goldenrod";
   return selectedStore;
 }
@@ -87,7 +98,6 @@ function deleteStore(key) {
 }
 
 function deleteGroceryItem(key) {
-  let groceryItemRef = storesRef.equalTo();
   groceryItemRef.child(key).remove();
 }
 
@@ -97,12 +107,12 @@ function saveStore(name, address) {
     let userStoreInput = {
       name: name,
       address: address,
-      storeKey: '',
+      key: '',
     };
   
     // Get a key for a new Store.
-    let newStoreKey = firebase.database().ref().push().key;
-    userStoreInput[storeKey] = newStoreKey;
+    let newStoreKey = firebase.database().ref("stores").push().key;
+    userStoreInput[key] = newStoreKey;
   
     // Write the new store's data.
     let updates = {};
@@ -117,16 +127,17 @@ function saveGroceryitem(storeId, foodName, quantityOfFood, priceOfFood) {
         foodName: foodName,
         quantityOfFood: quantityOfFood,
         priceOfFood: priceOfFood,
-        itemKey: ''
+        key: '',
+        store: storeId
     };
   
     // Get a key for a new Grocery Item.
-    let newGroceryItemtKey = firebase.database().ref().child('/stores/' + storeId).push().key;
-    userGroceryItemInput[storeId] = newGroceryItemtKey;
+    let newGroceryItemKey = firebase.database().ref("groceryItems").push().key;
+    userGroceryItemInput[key] = newGroceryItemKey;
   
     // Write the new Grocery Item into the Store that was selected!
     let updates = {};
-    updates['/stores/' + storeId + '/' + newGroceryItemtKey] = userGroceryItemInput;
+    updates['/groceryItems/' + newGroceryItemKey] = userGroceryItemInput;
   
     return firebase.database().ref().update(updates);
 }
