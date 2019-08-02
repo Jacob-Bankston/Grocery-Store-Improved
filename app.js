@@ -28,11 +28,28 @@ storesRef.on("value", snapshot => {
 function displayStores(stores) {
   let storeItems = stores.map(store => {
     return `<div class="storeItem">
-                <span onclick='storeSelected("${store.key}")'>${store.name} - ${store.address}</span>
-                <button onclick='deleteStore("${store.key}")'>Delete</button>
+                <div class="storeButtons">
+                    <button onclick='selectStore("${store.key}")'>Add Item</button>
+                    <button onclick='deleteStore("${store.key}")'>Delete</button>
+                </div>
+                <span class="storeNameInfo">${store.name}</span>
+                <span class="storeAddressInfo">${store.address}</span>
+                <div id="${store.key}" class="groceryItemsListOnTheStore"></div>
             </div>`;
   });
   storeList.innerHTML = storeItems.join("");
+}
+
+function displayGroceryItems(items) {
+  let groceryItems = items.map(item => {
+    return `<div class="groceryItem">
+                <span>${item.foodName}</span>
+                <span>${item.quantityOfFood}</span>
+                <span>${item.priceOfFood}</span>
+                <button onclick='deleteGroceryItem("${item.key}")'>Delete</button>
+            </div>`;
+  });
+  foodList.innerHTML = groceryItems.join("");
 }
 
 function storeSelected(key) {
@@ -43,6 +60,8 @@ function storeSelected(key) {
   grocerylist.style.color = "goldenrod";
   return selectedStore;
 }
+
+
 
 addStoreButton.addEventListener("click", () => {
   let name = nameTextBox.value;
@@ -62,23 +81,31 @@ addFoodItemButton.addEventListener("click", () => {
   saveGroceryItem(foodName, quantityOfFood, priceOfFood);
 });
 
+
+
 function deleteStore(key) {
   storesRef.child(key).remove();
 }
 
+function deleteGroceryItem(key) {
+  let groceryItemRef = storesRef.equalTo();
+  groceryItemRef.child(key).remove();
+}
+
+
 function saveStore(name, address) {
-    // A post entry.
+    // A Store entry.
     let userStoreInput = {
       name: name,
       address: address,
       storeKey: '',
     };
   
-    // Get a key for a new Post.
+    // Get a key for a new Store.
     let newStoreKey = firebase.database().ref().push().key;
     userStoreInput[storeKey] = newStoreKey;
   
-    // Write the new post's data simultaneously in the posts list and the user's post list.
+    // Write the new store's data.
     let updates = {};
     updates['/stores/' + newStoreKey] = userStoreInput;
   
@@ -86,7 +113,7 @@ function saveStore(name, address) {
 }
 
 function saveGroceryitem(storeId, foodName, quantityOfFood, priceOfFood) {
-    // A post entry.
+    // A Grocery Item entry.
     let userGroceryItemInput = {
         foodName: foodName,
         quantityOfFood: quantityOfFood,
@@ -94,11 +121,11 @@ function saveGroceryitem(storeId, foodName, quantityOfFood, priceOfFood) {
         itemKey: ''
     };
   
-    // Get a key for a new Post.
+    // Get a key for a new Grocery Item.
     let newGroceryItemtKey = firebase.database().ref().child('/stores/' + storeId).push().key;
     userGroceryItemInput[storeId] = newGroceryItemtKey;
   
-    // Write the new post's data simultaneously in the posts list and the user's post list.
+    // Write the new Grocery Item into the Store that was selected!
     let updates = {};
     updates['/stores/' + storeId + '/' + newGroceryItemtKey] = userGroceryItemInput;
   
